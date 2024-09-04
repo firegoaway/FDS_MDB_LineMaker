@@ -2,6 +2,7 @@ import re
 import tkinter as tk
 from tkinter import messagebox
 import configparser
+import os
 
 class Tooltip(object):
     """    Другой метод создания тултипсов    """
@@ -58,7 +59,6 @@ def read_file_path(ini_file):
     config = configparser.ConfigParser()
     config.read(ini_file, encoding='utf-16')
     return config['filePath']['filePath']
-
 
 def calculate_cell_sizes(meshes):
     max_cs_values = []
@@ -125,19 +125,29 @@ def on_submit():
 
 
 def load_file_path():
+    current_directory = os.path.dirname(__file__)
+    parent_directory = os.path.abspath(os.path.join(current_directory, os.pardir))
+    inis_path = os.path.join(parent_directory, 'inis')
+        
+    ini_path = os.path.join(inis_path, 'filePath.ini')
+    
     try:
-        return read_file_path('filePath.ini')
+        return read_file_path(ini_path)
     except Exception as e:
         messagebox.showerror("Ошибка", f"Не удалось считать путь к файлу: {str(e)}")
 
 
 if __name__ == "__main__":
     file_path = load_file_path()
+    
+    current_directory = os.path.dirname(__file__)
+    parent_directory = os.path.abspath(os.path.join(current_directory, os.pardir))
+    icon_path = os.path.join(parent_directory, '.gitpics', 'rhf.ico')
 
     root = tk.Tk()
     root.title("FDS MISC/DEVC/BNDF Line Maker v0.1.0")
     root.geometry("400x200")
-    root.iconbitmap('.gitpics\\rhf.ico')
+    root.iconbitmap(icon_path)
     
     main_frame = tk.Frame(root, padx=10, pady=10)
     main_frame.pack(padx=10, pady=10)
